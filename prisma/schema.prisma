@@ -9,8 +9,20 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(cuid())
-  email    String  @unique
-  name     String
-  password String?
+  id            String         @id @default(cuid())
+  email         String         @unique
+  name          String
+  password      String?
+  projectBriefs ProjectBrief[]
+}
+
+model ProjectBrief {
+  brief_id       String @id @default(cuid())
+  name           String
+  description    String
+  key_objectives String
+  feature        String
+  user_stories   String
+  userId         String
+  user           User   @relation(fields: [userId], references: [id])
 }
