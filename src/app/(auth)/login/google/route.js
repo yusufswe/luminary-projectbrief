@@ -41,7 +41,7 @@ export async function GET(req) {
     const jwtToken = jwt.sign(payload, "secret123");
     cookies().set("token", jwtToken);
 
-    redirect("/dashboard");
+    redirect("/");
   }
 
   const payload = {
@@ -53,5 +53,5 @@ export async function GET(req) {
   const jwtToken = jwt.sign(payload, "secret123");
   cookies().set("token", jwtToken);
 
-  redirect("/dashboard");
+  redirect("/");
 }
