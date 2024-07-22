@@ -3,10 +3,8 @@ const inter = Inter({ subsets: ["latin"] });
 import "@/styles/globals.css";
 
 export const metadata = {
-  title:
-    "Template Next.js (Canary Version), Prisma, Cloudflare R2 | Devscale ID",
-  description:
-    "Template Project Next.js (Canary Version), Prisma, Cloudflare R2 for Devscale ID",
+  title: "Luminary - Project Brief AI",
+  description: "Luminary - Project Brief AI",
   icons: {
     icon: "/icon.svg",
   },
