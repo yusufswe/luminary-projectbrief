@@ -52,7 +52,7 @@ export default function LoginPage() {
         </div>
         <GoogleLogin />
         <div className="text-center">
-          <span>Don't have an account?</span>
+          <span>Dont have an account?</span>
           <Link
             href="/register"
             className="text-blue-700  font-semibold tracking-wide"
