@@ -38,7 +38,7 @@ export async function GET(req) {
       email: newUser.email,
     };
 
-    const jwtToken = jwt.sign(payload, "secret123");
+    const jwtToken = jwt.sign(payload, process.env.JWT_SECRET);
     cookies().set("token", jwtToken);
 
     redirect("/");
@@ -50,7 +50,7 @@ export async function GET(req) {
     email: findUser.email,
   };
 
-  const jwtToken = jwt.sign(payload, "secret123");
+  const jwtToken = jwt.sign(payload, process.env.JWT_SECRET);
   cookies().set("token", jwtToken);
 
   redirect("/");

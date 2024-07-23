@@ -3,8 +3,8 @@ const inter = Inter({ subsets: ["latin"] });
 import "@/styles/globals.css";
 
 export const metadata = {
-  title: "Luminary - Project Brief AI",
-  description: "Luminary - Project Brief AI",
+  title: "Project Brief AI",
+  description: "Project Brief AI",
   icons: {
     icon: "/icon.svg",
   },
