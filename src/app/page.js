@@ -9,7 +9,6 @@ export default function Home() {
       </h2>
       <h2 className="text-2xl">
         Ada tambahan setup daisyUI, Prisma ORM, dan AWS S3 untuk Cloudflare R2
-        🔥
       </h2>
     </main>
   );
