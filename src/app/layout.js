@@ -11,15 +11,15 @@ import AuthContext from "./authContext";
 export default function RootLayout({ children }) {
   const [auth, setAuth] = useState(false);
 
-  useEffect(() => {
-      async function fetchData() {
-        const user = await authCheck();
-        if (user) {
-          setAuth(true);
-        }
-      }
-      fetchData();
-  }, []);
+  // async function fetchData() {
+  //       const user = await authCheck();
+  //       if (user) {
+  //         setAuth(true);
+  //       }
+  //     }
+
+  // fetchData();
+
 
   const login = () => {
     setAuth(true);
@@ -33,10 +33,10 @@ export default function RootLayout({ children }) {
     <AuthContext.Provider value={{ auth, login, logout }}>
     <html lang="en">
       <body
-        className={`${inter.className} bg-white   min-h-dvh tracking-tight`}
+        className={`${inter.className} bg-white  min-h-dvh tracking-tight`}
       >
         {auth != false ? (
-          <div className="container mx-auto px-4 py-2 flex justify-between items-center">
+          <div className="container flex justify-between items-center">
             <div className="text-xl font-bold">Brief AI</div>
             <div className="flex items-center">
               <a href="/bookmark">

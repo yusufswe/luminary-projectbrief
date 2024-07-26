@@ -7,6 +7,7 @@ import { deleteProjectBrief } from "./actionDeleteBrief";
 
 export default function BorkmarkPage() {
   const [projectBriefs, setProjectBriefs] = useState([]);
+    const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -32,12 +33,18 @@ export default function BorkmarkPage() {
       console.error("Error fetching project briefs:", error);
     }
   }
- 
+    const handleCopy = () => {
+    if (isCopied) {
+      return;
+    }
+    setIsCopied(true);
+    toast.success("Text copied to clipboard");
+    setTimeout(() => setIsCopied(false), 1500);
+  };
   return (
     <main className="w-full">
-      <div className="max-w-3xl bg-red-40 mx-auto pt-24 pb-6 lg:mt-52">
-        
-        {projectBriefs && projectBriefs.length > 0 && (
+      <div className="max-w-3xl mx-auto pb-6 lg:mt-10">
+        {projectBriefs && projectBriefs.length > 0 ? (
           <div>
             {projectBriefs.map((projectBrief) => (
               <div key={projectBrief.brief_id} className="mx-6">
@@ -55,13 +62,7 @@ export default function BorkmarkPage() {
                 >
                   Copy
                 </button>
-      
-              <button
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-2 rounded flex-grow-0"
-                
-              >
-                Save
-              </button>
+
               <button
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded flex-grow-0"
                 onClick={() => handleDelete(projectBrief.brief_id)}
@@ -72,8 +73,7 @@ export default function BorkmarkPage() {
               </div>
             ))}
           </div>
-        )}
-        {!projectBriefs && (
+        ): (
           <p className="text-center">No project briefs Saved</p>
         )}
       </div>

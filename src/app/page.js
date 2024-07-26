@@ -7,24 +7,13 @@ import { Toaster, toast } from "react-hot-toast";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { saveBrief } from "./actionSave";
 import { ProjectBrief } from "@/components/projectBrief";
-import AuthContext from "./authContext";
 
 export default function Home() {
   const [state, formAction, pending] = useActionState(generateBrief, null);
   const [brief, setBrief] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
   const [isSave, setIsSave] = useState(false);
-  const {login} =useContext(AuthContext);
 
-  useEffect(() => {
-    async function fetchData() {
-      const user = await authCheck();
-      if (user) {
-        login();
-      }
-    }
-    fetchData();
-  }, []);
 
   useEffect(() => {
     if (state?.status != null && state?.status !== 200) {
@@ -52,14 +41,7 @@ export default function Home() {
     }
   }, [state]);
 
-  const handleCopy = () => {
-    if (isCopied) {
-      return;
-    }
-    setIsCopied(true);
-    toast.success("Text copied to clipboard");
-    setTimeout(() => setIsCopied(false), 1500);
-  };
+
 
   const handleSave = async () => {
     try {
