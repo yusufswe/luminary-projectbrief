@@ -1,3 +1,5 @@
+"use server";
+
 import { getProjectBriefWithDetailsById } from "../actionGetBrief";
 import { Brief } from "./briefslist";
 
