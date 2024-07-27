@@ -47,7 +47,7 @@ export async function loginAction(_, formData) {
   };
 
   const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: "30s",
+    expiresIn: "7d",
   });
   cookies().set("token", jwtToken, { httpOnly: true, secure: true });
 
