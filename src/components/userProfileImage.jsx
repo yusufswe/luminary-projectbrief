@@ -3,13 +3,17 @@ import { ProfileAction } from "@/app/(profile)/profile/action.js";
 import Image from "next/image";
 
 export const UserProfileImage = ({ user }) => {
+  const [photoUrl, setPhotoUrl] = useState(`${process.env.R2_PUBLIC_URL}/brief-project-ai/${user.id}/${user.photoUrl}`);
+
+
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
       try {
-        await ProfileAction(null, formData);
+        const photo = await ProfileAction(null, formData);
+        setPhotoUrl(`${photo.photoUrl}`);
       } catch (error) {
         console.error("Error uploading image:", error);
       }
@@ -21,7 +25,7 @@ export const UserProfileImage = ({ user }) => {
       <div className="w-24 h-24 md:w-32 md:h-32 relative">
         <img
           alt="profile image"
-          src={`${process.env.R2_PUBLIC_URL}/brief-project-ai/${user.id}/${user.photoUrl}`}
+          src={photoUrl}
           className="bg-red-800 rounded-full object-cover w-full h-full"
         />
       </div>
