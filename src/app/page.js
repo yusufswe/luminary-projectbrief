@@ -5,7 +5,6 @@ import { useState, useActionState, useEffect } from "react";
 import { generateBrief } from "./action";
 
 export default function Home() {
-
   const [state, formAction, pending] = useActionState(generateBrief, null);
   const [error, setError] = useState(false);
 
