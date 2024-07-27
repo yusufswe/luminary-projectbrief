@@ -1,5 +1,3 @@
-"use server"
-
 import { auth } from '@/libs/auth';
 
 const { PrismaClient } = require('@prisma/client');

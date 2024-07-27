@@ -1,16 +1,11 @@
 
-
-import { getProjectBriefWithDetailsById } from "./actionGetBrief";
-import { Brief } from "./components/briefslist";
+import GetBrief from "./components/getBrief";
 
 
-const BookmarkPage = async () => {
-  const briefs = await getProjectBriefWithDetailsById();
+const BookmarkPage = () => {
 
   return (
-    <div className="w-full">
-      <Brief Briefs={briefs}/>
-    </div>
+    <GetBrief/>
   );
 }
 

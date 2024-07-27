@@ -9,8 +9,6 @@ export const Header = async() => {
     src = `${process.env.R2_PUBLIC_URL}/brief-project-ai/${severAuth.id}/${severAuth.photoUrl}`
   }
 
-
-
   return (
     <div className="">
       <div className="navbar bg-base-100">
