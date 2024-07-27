@@ -1,11 +1,10 @@
 
-import GetBrief from "./components/getBrief";
-
-
 const BookmarkPage = () => {
 
   return (
-    <GetBrief/>
+    <div>
+      <h1>text</h1>
+    </div>
   );
 }
 
