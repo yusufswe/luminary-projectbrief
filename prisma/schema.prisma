@@ -12,18 +12,42 @@ model User {
   id            String         @id @default(cuid())
   email         String         @unique
   name          String
-  password      String?
+  password      String
   photoUrl      String?
   projectBriefs ProjectBrief[]
 }
 
 model ProjectBrief {
-  brief_id       String @id @default(cuid())
-  name           String
-  description    String
-  key_objectives String
-  feature        String
-  user_stories   String
-  userId         String
-  user           User   @relation(fields: [userId], references: [id])
+  brief_id    String      @id @default(cuid())
+  name        String
+  description String
+  userId      String
+  dateCreated DateTime    @default(now())
+  dateUpdated DateTime    @updatedAt
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  features    Feature[]
+  userStories UserStory[]
+  objective   objective[]
+}
+
+model Feature {
+  feature_id      String       @id @default(cuid())
+  name            String
+  detail          String
+  projectBriefsId String
+  projectBriefs   ProjectBrief @relation(fields: [projectBriefsId], references: [brief_id], onDelete: Cascade)
+}
+
+model objective {
+  objective_id    String       @id @default(cuid())
+  name            String
+  projectBriefsId String
+  projectBriefs   ProjectBrief @relation(fields: [projectBriefsId], references: [brief_id], onDelete: Cascade)
+}
+
+model UserStory {
+  userStory_id    String       @id @default(cuid())
+  name            String
+  projectBriefsId String
+  projectBriefs   ProjectBrief @relation(fields: [projectBriefsId], references: [brief_id], onDelete: Cascade)
 }
