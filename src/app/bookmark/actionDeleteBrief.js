@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 
 export async function deleteProjectBrief(brief_id){
     try {
-        console.log("start");
         await prisma.projectBrief.delete({
             where: {
                 brief_id: brief_id,

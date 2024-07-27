@@ -1,19 +1,17 @@
 "use server";
 
-import findById from '@/libs/findById';
+import { findUser } from '@/libs/findUser';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 export async function saveBrief(data) {
-  console.log("start 1");
   const { name_app, description, objectives, key_features, user_stories } = data;
 
   
 
   try {
-    console.log("start");
-    const {id} = await findById();
+    const {id} = await findUser();
     console.log(`user id is in ${id}`);
     const result = await prisma.$transaction(async () => {
       const projectBrief = await createProjectBrief(name_app, description,id);

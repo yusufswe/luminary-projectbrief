@@ -1,6 +1,8 @@
 "use server";
 
-import findById from "@/libs/findById";
+import { findUser } from "@/libs/findUser";
+
+
 
 export async function generateBrief(_, formData) {
   try {
@@ -19,7 +21,7 @@ export async function generateBrief(_, formData) {
       
       The output should be in JSON and just JSON
       `;
-    const user = await findById();
+    const user = await findUser();
 
     if (!user) {
       return {
@@ -58,7 +60,7 @@ export async function generateBrief(_, formData) {
     console.log(data);
     console.log(result);
   
-    if (error.length > 0) {
+    if (error.length >0 ) {
       return {
         status: 400,
         body: {

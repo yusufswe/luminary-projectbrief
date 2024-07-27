@@ -1,44 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useState, useActionState, useEffect,useContext } from "react";
+import { useState, useActionState, useEffect } from "react";
 import { generateBrief } from "./actionGenerate";
 import { Toaster, toast } from "react-hot-toast";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import { saveBrief } from "./actionSave";
 import { ProjectBrief } from "@/components/projectBrief";
+import { CopyButton } from "@/components/copyButton";
+
 
 export default function Home() {
   const [state, formAction, pending] = useActionState(generateBrief, null);
-  const [brief, setBrief] = useState(null);
-  const [isCopied, setIsCopied] = useState(false);
   const [isSave, setIsSave] = useState(false);
 
-
   useEffect(() => {
-    if (state?.status != null && state?.status !== 200) {
-      toast.error(state?.body?.message);
-    } else if (state?.status === 200) {
+    if (state?.status === 200) {
       setIsSave(false);
-      setBrief(`
-      Name: ${state?.body.name_app}
-      
-      Description:
-      ${state?.body.description}
-      
-      Objective: \n ${state.body.objective
-        .map((item) => `- ${item.name} `)
-        .join("\n ")}
-      
-      Key Features: \n ${state?.body.key_features
-        .map((item) => `- ${item.name}: ${item.detail}`)
-        .join("\n ")}
-      {}
-      User Stories: \n ${state?.body.user_stories
-        .map((item) => `- ${item.name} `)
-        .join("\n ")}
-      `);
+    }else if (state?.status === 400 || state?.status === 500) {
+      toast.error(`${state?.body.message}`);
     }
+
   }, [state]);
 
 
@@ -72,13 +53,13 @@ export default function Home() {
 
       <Toaster />
 
-      <div className="max-w-3xl bg-red-40 mx-auto pt-8 md:pt-24 pb-6 lg:mt-52">
+      <div className="max-w-3xl mx-auto pt-8 md:pt-24 pb-6 lg:mt-52">
         <h1 className="font-bold text-center text-2xl mb-6">Brief AI</h1>
         <form className="flex flex-col items-center" action={formAction}>
           <input
             name="features"
             type="text"
-            placeholder="Type here"
+            placeholder="Tuliskan fitur yang kamu inginkan dan pisah dengan koma(,)"
             className="input input-bordered w-full max-w-3xl rounded-full"
           />
           <button
@@ -99,14 +80,14 @@ export default function Home() {
               userStories={state?.body.user_stories ? state.body.user_stories : []}
             />
             <div className="flex flex-row justify-end gap-4 w-full py-4">
-              <CopyToClipboard text={brief}>
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded flex-grow-0"
-                  onClick={handleCopy}
-                >
-                  Copy
-                </button>
-              </CopyToClipboard>
+              
+              <CopyButton 
+                nameApp={state?.body.name_app}
+                description={state?.body.description}
+                objective={state?.body.objective}
+                keyFeatures={state?.body.key_features}
+                userStories={state?.body.user_stories}
+              />
               <button
                 className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-2 rounded flex-grow-0"
                 onClick={handleSave}
