@@ -30,6 +30,7 @@ export async function GET(req) {
       data: {
         name: user.name,
         email: user.email,
+        password: "google-gfjirt678457dut5754",
       },
     });
     const payload = {
