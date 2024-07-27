@@ -1,24 +1,96 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { Header } from "@/components/header";
-import { useState, useActionState, useEffect } from "react";
-import { generateBrief } from "./action";
+import { useState, useActionState, useEffect,useContext } from "react";
+import { generateBrief } from "./actionGenerate";
+import { Toaster, toast } from "react-hot-toast";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { saveBrief } from "./actionSave";
+import { ProjectBrief } from "@/components/projectBrief";
+import AuthContext from "./authContext";
 
 export default function Home() {
   const [state, formAction, pending] = useActionState(generateBrief, null);
-  const [error, setError] = useState(false);
+  const [brief, setBrief] = useState(null);
+  const [isCopied, setIsCopied] = useState(false);
+  const [isSave, setIsSave] = useState(false);
+  const {login} =useContext(AuthContext);
 
   useEffect(() => {
-    if (state?.status === 400) {
-      setError(true);
-    } else {
-      setError(false);
+    async function fetchData() {
+      const user = await authCheck();
+      if (user) {
+        login();
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (state?.status != null && state?.status !== 200) {
+      toast.error(state?.body?.message);
+    } else if (state?.status === 200) {
+      setIsSave(false);
+      setBrief(`
+      Name: ${state?.body.name_app}
+      
+      Description:
+      ${state?.body.description}
+      
+      Objective: \n ${state.body.objective
+        .map((item) => `- ${item.name} `)
+        .join("\n ")}
+      
+      Key Features: \n ${state?.body.key_features
+        .map((item) => `- ${item.name}: ${item.detail}`)
+        .join("\n ")}
+      {}
+      User Stories: \n ${state?.body.user_stories
+        .map((item) => `- ${item.name} `)
+        .join("\n ")}
+      `);
     }
   }, [state]);
+
+  const handleCopy = () => {
+    if (isCopied) {
+      return;
+    }
+    setIsCopied(true);
+    toast.success("Text copied to clipboard");
+    setTimeout(() => setIsCopied(false), 1500);
+  };
+
+  const handleSave = async () => {
+    try {
+      if (isSave) {
+        toast.error("project brief has been saved");
+        return;
+      }
+      setIsSave(true);
+      const data = {
+        name_app: state?.body.name_app,
+        description: state?.body.description,
+        objectives: state?.body.objective,
+        key_features: state?.body.key_features,
+        user_stories: state?.body.user_stories,
+      };
+      const response = await saveBrief (data);
+      if (response) {
+        toast.success("Brief saved successfully");
+      }
+    } catch (error) {
+      console.error("Error saving project brief:", error);
+      toast.error("Error saving project brief");
+    }
+  };
+
   return (
-    <main className="w-full">
-      <Header />
-      <div className="max-w-3xl bg-red-40 mx-auto pt-24 pb-6 lg:mt-52">
+    <main className="w-full px-4 md:px-6">
+
+      <Toaster />
+
+      <div className="max-w-3xl bg-red-40 mx-auto pt-8 md:pt-24 pb-6 lg:mt-52">
         <h1 className="font-bold text-center text-2xl mb-6">Brief AI</h1>
         <form className="flex flex-col items-center" action={formAction}>
           <input
@@ -35,115 +107,31 @@ export default function Home() {
           </button>
         </form>
 
-        {error === true && (
-          <div
-            class="relative z-10"
-            aria-labelledby="modal-title"
-            role="dialog"
-            aria-modal="true"
-          >
-            <div
-              class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-              aria-hidden="true"
-            ></div>
-
-            <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-              <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                  <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                      <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                        <svg
-                          class="h-6 w-6 text-red-600"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-                          />
-                        </svg>
-                      </div>
-                      <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                        <h3
-                          class="text-base font-semibold leading-6 text-gray-900"
-                          id="modal-title"
-                        >
-                          Deactivate account
-                        </h3>
-                        <div class="mt-2">
-                          <p class="text-sm text-gray-500">
-                            Are you sure you want to deactivate your account?
-                            All of your data will be permanently removed. This
-                            action cannot be undone.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                    <button
-                      type="button"
-                      class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                      onClick={() => setError(false)}
-                    >
-                      Deactivate
-                    </button>
-                    <button
-                      type="button"
-                      class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                      onClick={() => setError(false)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {state?.status === 200 && (
           <div className="mx-6">
-            <div className="space-y-4">
-              <div>
-                <span className="font-bold mr-2">Name:</span>{" "}
-                {state.body.name_app}
-              </div>
-              <div>
-                <p className="font-bold mr-2">Description:</p>{" "}
-                <p className="indent-8">{state.body.description}</p>
-              </div>
-              <div>
-                <span className="font-bold block mb-2">Objective:</span>
-                <ul className="list-disc pl-4">
-                  {state.body.objective.map((item, index) => (
-                    <li key={index}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <span className="font-bold block mb-2">Key Features:</span>
-                <ul className="list-disc pl-4">
-                  {state.body.key_features.map((item, index) => (
-                    <li key={index}>
-                      {item.name}: {item.detail}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <span className="font-bold block mb-2">User Stories:</span>
-                <ul className="list-disc pl-4">
-                  {state.body.user_stories.map((item, index) => (
-                    <li key={index}>{item}</li>
-                  ))}
-                </ul>
-              </div>
+            <ProjectBrief
+              nameApp={state?.body.name_app ? state.body.name_app : ""}
+              description={state?.body.description ? state.body.description : ""}
+              objective={state?.body.objective ? state.body.objective : []}
+              keyFeatures={state?.body.key_features ? state.body.key_features : []}
+              userStories={state?.body.user_stories ? state.body.user_stories : []}
+            />
+            <div className="flex flex-row justify-end gap-4 w-full py-4">
+              <CopyToClipboard text={brief}>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded flex-grow-0"
+                  onClick={handleCopy}
+                >
+                  Copy
+                </button>
+              </CopyToClipboard>
+              <button
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-2 rounded flex-grow-0"
+                onClick={handleSave}
+              >
+                Save
+              </button>
+              
             </div>
           </div>
         )}

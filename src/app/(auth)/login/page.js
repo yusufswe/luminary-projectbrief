@@ -5,6 +5,7 @@ import { loginAction } from "./action";
 import { Toast } from "@/components/toast";
 import Link from "next/link";
 import { GoogleLogin } from "@/components/googleLogin";
+import { useEffect } from  "react";
 
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState(loginAction, null);
