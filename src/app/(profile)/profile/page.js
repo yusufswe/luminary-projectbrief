@@ -18,14 +18,16 @@ export default async function ProfilePage() {
   });
 
   return (
-    <main className="grid grid-cols-4">
-      <aside className="col-span-1 bg-slate-900 h-screen space-y-7 p-24">
+    <main className="grid grid-cols-1 md:grid-cols-4 min-h-screen">
+      <aside className="col-span-1 bg-slate-900 p-6 md:p-12 lg:p-24 space-y-7">
         <UserProfileImage user={userProfile} />
       </aside>
-      <div className="col-span-1 p-24">
-        <div className="space-y-3">
-          <h1 className="font-semibold text-5xl">Profile</h1>
-          <p className="text-slate-400 ">Edit your profile</p>
+      <div className="col-span-1 md:col-span-3 p-6 md:p-12 lg:p-24">
+        <div className="space-y-3 mb-6">
+          <h1 className="font-semibold text-3xl md:text-4xl lg:text-5xl">
+            Profile
+          </h1>
+          <p className="text-slate-400">Edit your profile</p>
         </div>
         <FormProfile user={userProfile} />
       </div>
