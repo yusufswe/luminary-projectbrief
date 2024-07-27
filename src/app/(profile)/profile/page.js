@@ -25,7 +25,7 @@ export default async function ProfilePage() {
       <div className="col-span-1 md:col-span-3 p-6 md:p-12 lg:p-24">
         <div className="space-y-3 mb-6">
           <h1 className="font-semibold text-3xl md:text-4xl lg:text-5xl">
-            Profile
+            Profilea
           </h1>
           <p className="text-slate-400">Edit your profile</p>
         </div>

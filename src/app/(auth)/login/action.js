@@ -17,6 +17,7 @@ export async function loginAction(_, formData) {
   });
 
   if (!findUser) {
+    console.log("User not found");
     return {
       status: "error",
       message: "User not found",
@@ -30,6 +31,7 @@ export async function loginAction(_, formData) {
   const isPasswordMatch = await bcrypt.compare(password, findUser.password);
 
   if (!isPasswordMatch) {
+    console.log("Invalid Credential");
     return {
       status: "error",
       message: "Invalid Credential",
@@ -50,6 +52,7 @@ export async function loginAction(_, formData) {
     expiresIn: "7d",
   });
   cookies().set("token", jwtToken, { httpOnly: true, secure: true });
+  console.log("Login success");
 
   redirect("/");
 }

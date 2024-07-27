@@ -1,3 +1,4 @@
+// formProfile.jsx
 "use client";
 import { ProfileAction } from "@/app/(profile)/profile/action.js";
 import { useState } from "react";
@@ -12,8 +13,10 @@ export const FormProfile = ({ user }) => {
 
     try {
       const result = await ProfileAction(null, formData);
+      // Handle success (e.g., show a success message)
       console.log(result.message);
     } catch (error) {
+      // Handle error (e.g., show an error message)
       console.error("Error updating profile:", error);
     }
   };
