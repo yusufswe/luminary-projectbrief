@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { ProjectBrief } from "@/components/projectBrief";
-import { deleteProjectBrief } from "../actionDeleteBrief";
 import { CopyButton } from "@/components/copyButton";
+import { deleteProjectBrief } from "../actionDeleteBrief";
 
 export const Brief = ({ Briefs }) => {
   const [projectBriefs, setProjectBriefs] = useState(Briefs);
