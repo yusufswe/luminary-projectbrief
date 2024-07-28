@@ -1,6 +1,5 @@
 "use client";
 import { ProfileAction } from "@/app/(profile)/profile/action.js";
-import Image from "next/image";
 
 export const UserProfileImage = ({ user }) => {
   const [photoUrl, setPhotoUrl] = useState(`${process.env.R2_PUBLIC_URL}/brief-project-ai/${user.id}/${user.photoUrl}`);
