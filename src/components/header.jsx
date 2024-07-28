@@ -12,7 +12,7 @@ export const Header = async() => {
     <div className="">
       <div className="navbar bg-base-100">
         <div className="flex-1 ">
-          <a className="btn btn-ghost text-xl">Brief AI</a>
+          <a className="btn btn-ghost text-xl" href="/">Brief AI</a>
         </div>
         <div className="flex-none">
           {severAuth ? (

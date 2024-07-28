@@ -24,6 +24,7 @@ export async function generateBrief(_, formData) {
     const user = await findUser();
 
     if (!user) {
+      console.log("User not found");
       return {
         status: 404,
         body: {
