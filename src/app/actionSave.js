@@ -13,40 +13,37 @@ export async function saveBrief(data) {
 
     console.log(`user id is ${id}`);
 
-    const transaction = await prisma.$transaction(async () => {
-      const projectBrief = await prisma.projectBrief.create({
-        data: { name: name_app, description, userId: id },
-      });
-
-      // Use createMany for objectives, features, and user stories
-      await prisma.objective.createMany({
-        data: objectives.map((objective) => ({
-          name: objective.name,
-          projectBriefsId: projectBrief.brief_id,
-        })),
-      });
-
-      await prisma.feature.createMany({
-        data: key_features.map((feature) => ({
-          name: feature.name,
-          detail: feature.detail,
-          projectBriefsId: projectBrief.brief_id,
-        })),
-      });
-
-      await prisma.userStory.createMany({
-        data: user_stories.map((userStory) => ({
-          name: userStory.name,
-          projectBriefsId: projectBrief.brief_id,
-        })),
-      });
-
-      return projectBrief;
+    const projectBrief = await prisma.projectBrief.create({
+      data: {
+        name: name_app,
+        description,
+        userId: id,
+        objective: {
+          createMany: {
+            data: objectives.map((objective) => ({ name: objective.name })),
+          },
+        },
+        features: {
+          createMany: {
+            data: key_features.map((feature) => ({ name: feature.name, detail: feature.detail })),
+          },
+        },
+        userStories: {
+          createMany: {
+            data: user_stories.map((userStory) => ({ name: userStory.name })),
+          },
+        },
+      },
+      include: {
+        objective: true,
+        features: true,
+        userStories: true,
+      },
     });
 
-    return transaction;
+    return projectBrief;
   } catch (error) {
     console.error("Error creating project brief with data:", error);
-    throw error; // Rethrow or handle as needed
+    throw error;
   }
 }
