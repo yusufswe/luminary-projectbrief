@@ -27,7 +27,7 @@ export async function ProfileAction(_, formData) {
       });
     }
 
-    return { status: "success", message: "Profile updated successfully" };
+    return { status: "ok", message: "Profile updated", photoUrl: `${process.env.R2_PUBLIC_URL}/${process.env.R2_BUCKET_NAME}/${profile.id}/${file.name}` };
   } catch (error) {
     console.error("Error updating profile:", error);
     return { status: "error", message: "Failed to update profile" };
