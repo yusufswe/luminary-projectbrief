@@ -1,6 +1,6 @@
 "use client";
 
-import { Header } from "@/components/header";
+
 import { useState, useActionState, useEffect } from "react";
 import { generateBrief } from "./action";
 
@@ -17,7 +17,7 @@ export default function Home() {
   }, [state]);
   return (
     <main className="w-full">
-      <Header />
+   
       <div className="max-w-3xl bg-red-40 mx-auto pt-24 pb-6 lg:mt-52">
         <h1 className="font-bold text-center text-2xl mb-6">Brief AI</h1>
         <form className="flex flex-col items-center" action={formAction}>
