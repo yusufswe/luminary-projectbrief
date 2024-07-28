@@ -6,6 +6,7 @@ import { auth } from "@/libs/auth";
 
 export async function ProfileAction(_, formData) {
   const user = auth();
+  
 
   const name = formData.get("name");
   const file = formData.get("file");
