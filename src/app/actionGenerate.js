@@ -14,12 +14,12 @@ export async function generateBrief(_, formData) {
       The output should be in JSON and just JSON format with the following structure:
       - name_app
       - description
-      - objective,list <name:"">
+      - objective,list with proprty {name:''}
       - key_features,list with property <name:"",detail:"">
-      - user_stories,list <name:"">
+      - user_stories,list with proprty {name:''}
       - error,list but if nothing error this property is list with 0 object but is something error this property have 1 message property the error
       
-      The output should be in JSON and just JSON
+      Don't add \`json\` and \`\` if any
       `;
     const user = await findUser();
 
@@ -33,6 +33,7 @@ export async function generateBrief(_, formData) {
     }
   
     const features = formData.get("features");
+
   
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -41,7 +42,7 @@ export async function generateBrief(_, formData) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo", // Model LLM yang digunakan
+        model: "gpt-4o-mini", // Model LLM yang digunakan
         messages: [
           { role: "system", content: systemPrompt },
           {

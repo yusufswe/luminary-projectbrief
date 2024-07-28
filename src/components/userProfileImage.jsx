@@ -1,9 +1,9 @@
 "use client";
 import { ProfileAction } from "@/app/(profile)/profile/action.js";
+import { useState } from "react";
 
 export const UserProfileImage = ({ user }) => {
-  const [photoUrl, setPhotoUrl] = useState(`${process.env.R2_PUBLIC_URL}/brief-project-ai/${user.id}/${user.photoUrl}`);
-
+  const [photoUrl, setPhotoUrl] = useState(`${user.photoUrl ? process.env.R2_PUBLIC_URL + "/brief-project-ai/" + user.id +"/"+ user.photoUrl : ""}`);
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
@@ -24,7 +24,7 @@ export const UserProfileImage = ({ user }) => {
       <div className="w-24 h-24 md:w-32 md:h-32 relative">
         <img
           alt="profile image"
-          src={photoUrl}
+          src={photoUrl ? photoUrl : "https://cdn.pixabay.com/photo/2015/03/04/22/35/avatar-659652_1280.png"}
           className="bg-red-800 rounded-full object-cover w-full h-full"
         />
       </div>

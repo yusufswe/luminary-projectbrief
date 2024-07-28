@@ -2,11 +2,11 @@
 
 
 import { useState, useActionState, useEffect } from "react";
-import { generateBrief } from "./action";
 import { Toaster, toast } from "react-hot-toast";
 import { saveBrief } from "./actionSave";
 import { ProjectBrief } from "@/components/projectBrief";
 import { CopyButton } from "@/components/copyButton";
+import { generateBrief } from "./actionGenerate";
 
 export default function Home() {
   const [state, formAction, pending] = useActionState(generateBrief, null);
