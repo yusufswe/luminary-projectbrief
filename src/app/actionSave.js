@@ -3,72 +3,50 @@
 import { findUser } from '@/libs/findUser';
 import { PrismaClient } from '@prisma/client';
 
-
 const prisma = new PrismaClient();
 
 export async function saveBrief(data) {
   const { name_app, description, objectives, key_features, user_stories } = data;
 
   try {
-    const {id} = await findUser();
+    const { id } = await findUser();
 
-    console.log(`user id is in ${id}`);
-    const result = await prisma.$transaction(async () => {
-      const projectBrief = await createProjectBrief(name_app, description, id);
-      await createObjectives(projectBrief.brief_id, objectives);
-      await createFeatures(projectBrief.brief_id, key_features);
-      await createUserStories(projectBrief.brief_id, user_stories);
+    console.log(`user id is ${id}`);
+
+    const transaction = await prisma.$transaction(async () => {
+      const projectBrief = await prisma.projectBrief.create({
+        data: { name: name_app, description, userId: id },
+      });
+
+      // Use createMany for objectives, features, and user stories
+      await prisma.objective.createMany({
+        data: objectives.map((objective) => ({
+          name: objective.name,
+          projectBriefsId: projectBrief.brief_id,
+        })),
+      });
+
+      await prisma.feature.createMany({
+        data: key_features.map((feature) => ({
+          name: feature.name,
+          detail: feature.detail,
+          projectBriefsId: projectBrief.brief_id,
+        })),
+      });
+
+      await prisma.userStory.createMany({
+        data: user_stories.map((userStory) => ({
+          name: userStory.name,
+          projectBriefsId: projectBrief.brief_id,
+        })),
+      });
+
       return projectBrief;
     });
-    return result;
+
+    return transaction;
   } catch (error) {
     console.error("Error creating project brief with data:", error);
     throw error; // Rethrow or handle as needed
   }
-}
-
-async function createProjectBrief(name, description, userId) {
-  return prisma.projectBrief.create({
-    data: { name, description, userId },
-  });
-}
-
-async function createObjectives(projectBriefId, objectives) {
-  return Promise.all(
-    objectives.map((objective) =>
-      prisma.objective.create({
-        data: {
-          name: objective.name,
-          projectBriefsId: projectBriefId,
-        },
-      })
-    )
-  );
-}
-
-async function createFeatures(projectBriefId, key_features) {
-  return Promise.all(
-    key_features.map((feature) =>
-      prisma.feature.create({
-        data: {
-          name: feature.name,
-          detail: feature.detail,
-          projectBriefsId: projectBriefId,
-        },
-      })
-    )
-  );
-}
-
-async function createUserStories(projectBriefId, user_stories) {
-  return Promise.all(
-    user_stories.map((userStory) =>
-      prisma.userStory.create({
-        data: {
-          name: userStory.name,
-          projectBriefsId: projectBriefId,
-        },
-      })
-    )
-  );
 }
